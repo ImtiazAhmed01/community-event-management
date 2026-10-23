@@ -1,0 +1,74 @@
+[
+  {
+    "id": "reg-1",
+    "eventId": "evt-1",
+    "userId": "vol-1",
+    "userName": "Alex Morgan",
+    "userEmail": "alex.volunteer@example.com",
+    "selectedSkill": "Gardening",
+    "registrationDate": "2026-10-16 14:20",
+    "status": "Confirmed",
+    "notes": "Has 3 years experience with community gardens."
+  },
+  {
+    "id": "reg-2",
+    "eventId": "evt-1",
+    "userId": "vol-2",
+    "userName": "Emily Chen",
+    "userEmail": "emily.chen@example.com",
+    "selectedSkill": "Logistics",
+    "registrationDate": "2026-10-17 09:15",
+    "status": "Registered",
+    "notes": "Can bring a pickup truck if equipment hauling is needed."
+  },
+  {
+    "id": "reg-3",
+    "eventId": "evt-1",
+    "userId": "vol-3",
+    "userName": "David Kim",
+    "userEmail": "david.kim@example.com",
+    "selectedSkill": "First Aid",
+    "registrationDate": "2026-10-18 11:30",
+    "status": "Confirmed"
+  },
+  {
+    "id": "reg-4",
+    "eventId": "evt-2",
+    "userId": "vol-1",
+    "userName": "Alex Morgan",
+    "userEmail": "alex.volunteer@example.com",
+    "selectedSkill": "Basic Python/Scratch",
+    "registrationDate": "2026-10-19 16:45",
+    "status": "Registered"
+  },
+  {
+    "id": "reg-5",
+    "eventId": "evt-3",
+    "userId": "vol-4",
+    "userName": "Jordan Taylor",
+    "userEmail": "jordan.t@example.com",
+    "selectedSkill": "Food Handling",
+    "registrationDate": "2026-10-15 10:00",
+    "status": "Confirmed"
+  },
+  {
+    "id": "reg-6",
+    "eventId": "evt-3",
+    "userId": "vol-5",
+    "userName": "Sophia Rodriguez",
+    "userEmail": "sophia.r@example.com",
+    "selectedSkill": "Organization",
+    "registrationDate": "2026-10-19 13:10",
+    "status": "Registered"
+  },
+  {
+    "id": "reg-7",
+    "eventId": "evt-6",
+    "userId": "vol-1",
+    "userName": "Alex Morgan",
+    "userEmail": "alex.volunteer@example.com",
+    "selectedSkill": "Field Work",
+    "registrationDate": "2026-10-10 12:00",
+    "status": "Attended"
+  }
+]
