@@ -94,7 +94,7 @@ export default function CreateEventPage() {
     setRequiredSkills(requiredSkills.filter((s) => s !== skillToRemove));
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setErrorMessage("");
 
@@ -113,7 +113,7 @@ export default function CreateEventPage() {
       return;
     }
 
-    const newEvt = createEvent({
+    const newEvt = await createEvent({
       title,
       description,
       eventDate,

@@ -51,9 +51,9 @@ export default function MyEventsPage() {
 
   const currentList = activeTab === "upcoming" ? upcomingList : pastList;
 
-  const handleConfirmCancel = () => {
+  const handleConfirmCancel = async () => {
     if (!cancelModalId) return;
-    const res = cancelRegistration(cancelModalId);
+    const res = await cancelRegistration(cancelModalId);
     setCancelModalId(null);
     if (res.success) {
       setFeedbackMsg(res.message);
