@@ -162,6 +162,14 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         profiles[fbUser.uid] = profile;
         localStorage.setItem("community_user_profiles", JSON.stringify(profiles));
       }
+
+      // Sync to database
+      fetch("/api/users", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(profile)
+      }).catch(console.warn);
+
       setUser(profile);
       localStorage.setItem("community_active_user", JSON.stringify(profile));
     } catch (err: unknown) {
@@ -240,6 +248,14 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       const profiles = savedProfiles ? JSON.parse(savedProfiles) : {};
       profiles[fbUser.uid] = newProfile;
       localStorage.setItem("community_user_profiles", JSON.stringify(profiles));
+
+      // Sync to database
+      fetch("/api/users", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(newProfile)
+      }).catch(console.warn);
+
       setUser(newProfile);
       localStorage.setItem("community_active_user", JSON.stringify(newProfile));
     } catch {

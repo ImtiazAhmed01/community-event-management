@@ -1,5 +1,34 @@
 import mongoose, { Schema, Document } from "mongoose";
 
+export interface IUser extends Document {
+  id: string;
+  name: string;
+  email: string;
+  role: 'organizer' | 'volunteer';
+  avatar?: string;
+  bio?: string;
+  skills?: string[];
+  interests?: string[];
+  phone?: string;
+}
+
+const UserSchema = new Schema<IUser>(
+  {
+    id: { type: String, required: true, unique: true },
+    name: { type: String, required: true },
+    email: { type: String, required: true, unique: true },
+    role: { type: String, enum: ['organizer', 'volunteer'], default: 'volunteer' },
+    avatar: { type: String },
+    bio: { type: String },
+    skills: { type: [String], default: [] },
+    interests: { type: [String], default: [] },
+    phone: { type: String }
+  },
+  { timestamps: true }
+);
+
+export const UserModel = mongoose.models.User || mongoose.model<IUser>("User", UserSchema);
+
 export interface IEvent extends Document {
   id: string;
   title: string;
