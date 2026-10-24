@@ -15,7 +15,8 @@ import {
   CheckCircle2, 
   AlertTriangle,
   ArrowRight,
-  FolderOpen
+  FolderOpen,
+  FileText
 } from "lucide-react";
 
 export default function MyEventsPage() {
@@ -177,7 +178,7 @@ export default function MyEventsPage() {
                       {!isCancelled && (
                         <button
                           onClick={() => setSelectedQRReg({ id: reg.id, title: evt.title, status: reg.status })}
-                          className="flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-emerald-50 dark:bg-emerald-950/60 text-emerald-700 dark:text-emerald-300 border border-emerald-300 dark:border-emerald-800 text-xs font-bold hover:bg-emerald-100 transition-colors"
+                          className="flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-emerald-50 dark:bg-emerald-950/60 text-emerald-700 dark:text-emerald-300 border border-emerald-300 dark:border-emerald-800 text-xs font-bold hover:bg-emerald-100 transition-colors cursor-pointer"
                         >
                           <QrCode className="w-3.5 h-3.5" />
                           QR Ticket Pass
