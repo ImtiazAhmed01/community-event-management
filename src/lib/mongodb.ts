@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
 
-const MONGODB_URI = process.env.MONGODB_URI || "mongodb+srv://commuityevent%26volunteermanagement:Y0PR2QLSLXrXJTLU@cluster0.mongodb.net/community_db?retryWrites=true&w=majority";
+const MONGODB_URI = process.env.MONGODB_URI || "";
 
 interface MongooseCache {
   conn: typeof mongoose | null;
@@ -19,6 +19,11 @@ if (!cached) {
 }
 
 export async function connectDB() {
+  if (!MONGODB_URI) {
+    console.warn("MONGODB_URI environment variable is not defined");
+    return null;
+  }
+
   if (cached!.conn) {
     return cached!.conn;
   }
