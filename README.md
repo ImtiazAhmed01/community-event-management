@@ -129,14 +129,39 @@ npm install
 ### 3. Setup Environment Variables
 Create a `.env.local` file in the root directory:
 ```env
+# Database
+MONGODB_URI="mongodb+srv://<username>:<password>@cluster0.mongodb.net/community_db?retryWrites=true&w=majority"
+
+# Firebase Authentication
 NEXT_PUBLIC_FIREBASE_API_KEY="your-api-key"
-NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN="your-auth-domain.firebaseapp.com"
+NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN="your-project.firebaseapp.com"
 NEXT_PUBLIC_FIREBASE_PROJECT_ID="your-project-id"
-NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET="your-storage-bucket.appspot.com"
-NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID="your-messaging-sender-id"
+NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET="your-project.firebasestorage.app"
+NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID="your-sender-id"
 NEXT_PUBLIC_FIREBASE_APP_ID="your-app-id"
+
+# AI Event Assistant Configuration
+# Optional external LLM API key (e.g. OpenAI or Gemini) to power dynamic event generation.
+# If omitted, UnityServe automatically activates its contextual built-in rule synthesizer.
+AI_API_KEY=""
+AI_MODEL="gemini-1.5-flash"
+NEXT_PUBLIC_ENABLE_AI_ASSISTANT="true"
 ```
-*(Note: If placeholders are kept, the platform automatically activates seamless mock session handling so all Google SSO and credential workflows function without interruption).*
+
+---
+
+## 🔑 Demo Credentials
+
+For quick evaluation, you can use the 1-click **"Fill Demo Organizer"** / **"Fill Demo Volunteer"** buttons on the [Login Page](https://communityeventvolunteer.netlify.app/login), or manually sign in with:
+
+| Role | Email | Password |
+|---|---|---|
+| **Organizer** | `organizer@unityserve.org` | `demo1234` |
+| **Volunteer** | `volunteer@unityserve.org` | `demo1234` |
+
+*(You can also use **Sign In with Google** on the login page).*
+
+---
 
 ### 4. Run Development Server
 ```bash
