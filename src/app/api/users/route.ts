@@ -14,11 +14,13 @@ export async function GET(req: Request) {
     if (email) {
       const user = await UserModel.findOne({ email });
       if (user) return NextResponse.json(user);
+      return NextResponse.json({ error: "User not found" }, { status: 404 });
     }
 
     if (id) {
       const user = await UserModel.findOne({ id });
       if (user) return NextResponse.json(user);
+      return NextResponse.json({ error: "User not found" }, { status: 404 });
     }
 
     const allUsers = await UserModel.find({});
