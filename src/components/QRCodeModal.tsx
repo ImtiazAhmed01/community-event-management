@@ -25,14 +25,15 @@ export default function QRCodeModal({
 
   useEffect(() => {
     if (isOpen && canvasRef.current) {
-      const payload = JSON.stringify({
-        ticketType: "VOLUNTEER_CHECKIN",
-        registrationId,
-        volunteerName,
-        eventTitle,
-        status,
-        timestamp: new Date().toISOString()
-      });
+      // Clean formatted text ticket that works on ANY mobile device offline / online without localhost errors
+      const payload = `🎟️ UNITYSERVE EVENT CHECK-IN PASS
+================================
+Event: ${eventTitle}
+Volunteer: ${volunteerName}
+Registration ID: ${registrationId}
+Status: ${status}
+Type: Verified Volunteer Ticket
+Issued: ${new Date().toLocaleDateString()}`;
 
       QRCode.toCanvas(
         canvasRef.current,
@@ -98,14 +99,14 @@ export default function QRCodeModal({
         <div className="flex gap-2">
           <button
             onClick={downloadQR}
-            className="flex-1 flex items-center justify-center gap-1.5 py-2.5 px-4 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-sm font-semibold shadow-md shadow-emerald-600/20 transition-all"
+            className="flex-1 flex items-center justify-center gap-1.5 py-2.5 px-4 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-sm font-semibold shadow-md shadow-emerald-600/20 transition-all cursor-pointer"
           >
             <Download className="w-4 h-4" />
             Save Ticket Pass
           </button>
           <button
             onClick={onClose}
-            className="py-2.5 px-4 rounded-xl bg-zinc-100 dark:bg-zinc-700 text-zinc-700 dark:text-zinc-300 text-sm font-semibold hover:bg-zinc-200 dark:hover:bg-zinc-600 transition-colors"
+            className="py-2.5 px-4 rounded-xl bg-zinc-100 dark:bg-zinc-700 text-zinc-700 dark:text-zinc-300 text-sm font-semibold hover:bg-zinc-200 dark:hover:bg-zinc-600 transition-colors cursor-pointer"
           >
             Close
           </button>
