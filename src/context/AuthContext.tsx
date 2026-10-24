@@ -138,58 +138,72 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   };
 
   const loginWithGoogle = async (preferredRole: 'organizer' | 'volunteer' = 'volunteer') => {
-    try {
-      const result = await signInWithPopup(auth, googleProvider);
-      const fbUser = result.user;
-      setFirebaseUser(fbUser);
-      setIsFirebaseAvailable(true);
+    const isPlaceholderKey = !process.env.NEXT_PUBLIC_FIREBASE_API_KEY || 
+      process.env.NEXT_PUBLIC_FIREBASE_API_KEY.includes("PlaceholderMock");
 
-      const savedProfiles = localStorage.getItem("community_user_profiles");
-      const profiles: Record<string, UserProfile> = savedProfiles ? JSON.parse(savedProfiles) : {};
-      
-      let profile = profiles[fbUser.uid];
-      if (!profile) {
-        profile = {
-          id: fbUser.uid,
-          name: fbUser.displayName || fbUser.email?.split('@')[0] || "Google Member",
-          email: fbUser.email || "googleuser@example.com",
-          role: preferredRole,
-          avatar: fbUser.photoURL || `https://api.dicebear.com/7.x/avataaars/svg?seed=${fbUser.uid}`,
-          skills: ["Teamwork", "Volunteer Assistance"],
-          interests: ["Community & Social"],
-          bio: `Joined via Google Authentication as ${preferredRole}.`
-        };
-        profiles[fbUser.uid] = profile;
-        localStorage.setItem("community_user_profiles", JSON.stringify(profiles));
+    if (!isPlaceholderKey) {
+      try {
+        const result = await signInWithPopup(auth, googleProvider);
+        const fbUser = result.user;
+        setFirebaseUser(fbUser);
+        setIsFirebaseAvailable(true);
+
+        const savedProfiles = localStorage.getItem("community_user_profiles");
+        const profiles: Record<string, UserProfile> = savedProfiles ? JSON.parse(savedProfiles) : {};
+        
+        let profile = profiles[fbUser.uid];
+        if (!profile) {
+          profile = {
+            id: fbUser.uid,
+            name: fbUser.displayName || fbUser.email?.split('@')[0] || "Google Member",
+            email: fbUser.email || "googleuser@example.com",
+            role: preferredRole,
+            avatar: fbUser.photoURL || `https://api.dicebear.com/7.x/avataaars/svg?seed=${fbUser.uid}`,
+            skills: ["Teamwork", "Volunteer Assistance"],
+            interests: ["Community & Social"],
+            bio: `Joined via Google Authentication as ${preferredRole}.`
+          };
+          profiles[fbUser.uid] = profile;
+          localStorage.setItem("community_user_profiles", JSON.stringify(profiles));
+        }
+
+        // Sync to database
+        fetch("/api/users", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(profile)
+        }).catch(console.warn);
+
+        setUser(profile);
+        localStorage.setItem("community_active_user", JSON.stringify(profile));
+        return;
+      } catch (err: unknown) {
+        console.warn("Live Firebase Google popup error:", err);
       }
-
-      // Sync to database
-      fetch("/api/users", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(profile)
-      }).catch(console.warn);
-
-      setUser(profile);
-      localStorage.setItem("community_active_user", JSON.stringify(profile));
-    } catch (err: unknown) {
-      console.warn("Firebase Google login error (fallback used if credentials are placeholder):", err);
-      // Seamless Dev Mode Fallback:
-      // If Firebase credentials are still placeholders or domain not whitelisted yet,
-      // provide simulated Google OAuth flow with genuine prompt experience
-      const simulatedGoogleUser: UserProfile = {
-        id: "google-user-" + Math.floor(Math.random() * 10000),
-        name: "Google Authenticated User",
-        email: "google.user@gmail.com",
-        role: preferredRole,
-        avatar: "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&w=200&q=80",
-        bio: `Logged in via Google SSO as a registered ${preferredRole}.`,
-        skills: ["Community Leadership", "Event Planning"],
-        interests: ["Environment & Nature", "Community & Social"]
-      };
-      setUser(simulatedGoogleUser);
-      localStorage.setItem("community_active_user", JSON.stringify(simulatedGoogleUser));
     }
+
+    // Seamless Google Auth Simulator when real Firebase API keys are pending
+    const simulatedGoogleUser: UserProfile = {
+      id: "google-usr-" + Date.now().toString(),
+      name: "Google Member",
+      email: "google.user@gmail.com",
+      role: preferredRole,
+      avatar: "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&w=200&q=80",
+      bio: `Authenticated via Google SSO as ${preferredRole}.`,
+      skills: ["Community Outreach", "Volunteer Assistance"],
+      interests: ["Community & Social"]
+    };
+
+    // Sync to database
+    fetch("/api/users", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(simulatedGoogleUser)
+    }).catch(console.warn);
+
+    setUser(simulatedGoogleUser);
+    localStorage.setItem("community_active_user", JSON.stringify(simulatedGoogleUser));
+
   };
 
   const loginWithEmail = async (email: string, pass: string, role?: 'organizer' | 'volunteer') => {
@@ -250,11 +264,15 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       localStorage.setItem("community_user_profiles", JSON.stringify(profiles));
 
       // Sync to database
-      fetch("/api/users", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(newProfile)
-      }).catch(console.warn);
+      try {
+        await fetch("/api/users", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(newProfile)
+        });
+      } catch (e) {
+        console.warn("User sync to DB warning:", e);
+      }
 
       setUser(newProfile);
       localStorage.setItem("community_active_user", JSON.stringify(newProfile));
@@ -270,6 +288,18 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         skills: ["Communication", "Event Assistance"],
         interests: ["Community & Social"]
       };
+
+      // Sync to database
+      try {
+        await fetch("/api/users", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(newProfile)
+        });
+      } catch (e) {
+        console.warn("Fallback user sync to DB warning:", e);
+      }
+
       setUser(newProfile);
       localStorage.setItem("community_active_user", JSON.stringify(newProfile));
     }
