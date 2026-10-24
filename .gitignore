@@ -39,3 +39,11 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# ignored artifacts & test scripts
+AGENTS.md
+DEPLOY_NETLIFY.txt
+deploy_netlify.txt
+*.mjs
+*mock_data*.json
+distribute_commits.ps1
